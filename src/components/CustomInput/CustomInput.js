@@ -6,6 +6,7 @@ import { TextInput } from 'react-native-paper';
 import OffVisible from '../../assets/svg/eye_closed_icon.svg'
 import Colors from '../../styles/Colors';
 
+
 const CustomInput = ({ title, placeholder, visiblePassword = false, name, control, rules = {}, secureTextEntry,keyboardType,maxLength,onDescription }) => {
 
     const [visible, setVisible] = useState(false)

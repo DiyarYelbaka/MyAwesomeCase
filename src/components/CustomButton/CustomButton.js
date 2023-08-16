@@ -27,6 +27,9 @@ const styles = StyleSheet.create({
     button_SECONDARY:{
     backgroundColor:Colors.blue,
     },
+    button_TERTIARY:{
+      backgroundColor:Colors.green,
+      },
    buttonTitle:{
     color:Colors.white,
     fontSize:18, 
