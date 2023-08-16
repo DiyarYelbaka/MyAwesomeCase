@@ -17,6 +17,7 @@ const WelcomeScreen = ({navigation}) => {
        <CustomButton 
         type={'PRIMARY'}
         title={'Login'}
+        onPress={()=>navigation.navigate('signInScreen')}
          />
        <CustomButton 
         type={'SECONDARY'}  
