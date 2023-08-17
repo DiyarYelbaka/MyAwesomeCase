@@ -65,7 +65,7 @@ function MyTabs() {
         tabBarStyle: {
           position: 'absolute',
           elevation: 8,
-          backgroundColor: Colors.bg_color,
+          backgroundColor: Colors.white,
           height: 65,
           borderTopWidth: 0
         },

@@ -1,76 +1,119 @@
-import { View, Text, StyleSheet, ScrollView, Image, Button, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { View,Text, StyleSheet, ScrollView, Image,KeyboardAvoidingView,Alert} from 'react-native'
+import React, { useEffect, useState} from 'react'
 import CutsomHeader from '../../components/CutsomHeader'
 import { useForm } from "react-hook-form";
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import Colors from '../../styles/Colors';
 import CustomModal from '../../components/CustomModal';
 import { deleteUser, post, updateUser } from '../../services/api';
+import { showMessage} from "react-native-flash-message";
+import SelectDropdown from 'react-native-select-dropdown'
+import Colors from '../../styles/Colors';
+import ArrowIcon from '../../assets/svg/bottom_arrow.svg'
 
 const CreateUserScreen = ({ navigation, route }) => {
     const { isEdit } = route.params || false
     const { userInfo } = route.params || {}
-
     
-    const { handleSubmit, control, formState: { errors }, watch } = useForm({
+    const [loading,setLoading] = useState(false)
+    const [loadingDelete,setLoadingDelete] = useState(false)
+    
+    const [isModalVisible, setModalVisible] = useState(false)
+    const [onDelete, setOnDelete] = useState(false)
+
+    const userStatus = [
+        "Active",
+        "Passive",
+      ]
+      const [onUserStatus, setOnUserStatus] = useState('');
+      
+
+    const { handleSubmit, control, formState: { errors }, watch,reset } = useForm({
         defaultValues:{
-            fullName:userInfo?.user_fullname,
-            email:userInfo?.user_email,
-            phoneNumber:userInfo?.user_phone
+            fullName: isEdit ? userInfo?.user_fullname : '',
+            email: isEdit ? userInfo?.user_email : '',
+            phoneNumber: isEdit ? userInfo?.user_phone : '',
         }
     });
-   
+
+    const randomNumber = Math.floor(Math.random() * 100) + 1;
+  
+
 
    async function handleAdd(data){
+
+    if(!onUserStatus) return Alert.alert('Ops','Please select status')
+
+    setLoading(true)
     const { fullName,email, password,phoneNumber } = data;
     console.log(fullName,email,password,phoneNumber)
     const postData = { 
         user_fullname:fullName,
         user_email:email,
-        user_password:password,
-        user_phone:phoneNumber
+        user_password:'123456',
+        user_phone:phoneNumber,
+        user_status:onUserStatus
       };
       try {
         const getResponse = await post('/users/new',postData);
+        navigation.navigate('usersScreen',{onRefresh:randomNumber})
+        setLoading(false)
+        showMessage({
+            message: "Congratulations",
+            description: "You have successfully created a user",
+            type: "success",
+          });
+          reset()
         console.log('GET Response:', getResponse);
+       
       } catch (error) {
+        setLoading(false)
+        showMessage({
+            message: "Ops",
+            description: "Please try again",
+            type: "danger",
+          });
         console.error('Error:', error);
-        
-       console.error('Error:', error.response.data.response);
+        //console.error('Error:', error.response.data.response);
      }
     }
-    console.log(userInfo?.user_id)
     
    async function handleUpdate(data){
+    setLoading(true)
         const { fullName,phoneNumber,email } = data;
         console.log(fullName,email,phoneNumber)
         const postData = { 
-            user_id:userInfo?.user_id,
+            user_id: userInfo?.user_id,
             user_fullname:fullName,
             user_email:email,
             user_phone:phoneNumber,
-            user_password:userInfo?.user_password
+            user_password:userInfo?.user_password,
+            user_status:onUserStatus
+            
           };
           try {
-            const getResponse = await updateUser(userInfo?.user_id,postData);
+            const getResponse   = await updateUser(userInfo?.user_id,postData);
+         //   navigation.navigate('usersScreen',{onRefresh:randomNumber})
+            setLoading(false)
+            setOnDelete(false)
+            setModalVisible(true)
             console.log('GET Response:', getResponse);
           } catch (error) {
+            showMessage({
+                message: "Ops",
+                description: "Please try again",
+                type: "danger",
+              });
+            setLoading(false)
             console.error('Error:', error);
             
           //  console.error('Error:', error.response.data.errorCode);
          }
     }
 
-    async function handleDelete(){
-          try {
-            const getResponse = await deleteUser(userInfo?.user_id);
-            console.log('GET Response:', getResponse);
-          } catch (error) {
-            console.error('Error:', error.response.data);
-            
-          //  console.error('Error:', error.response.data.errorCode);
-         }
+    async function handleDelete(){ 
+        setOnDelete(true)
+        setModalVisible(true)
     }
 
     return (
@@ -103,6 +146,7 @@ const CreateUserScreen = ({ navigation, route }) => {
                     title={'Phone Number'}
                     control={control}
                     name={'phoneNumber'}
+                    keyboardType={'number-pad'}
                     rules={{
                         required: 'Please enter phone number.',
                         minLength: {
@@ -115,6 +159,7 @@ const CreateUserScreen = ({ navigation, route }) => {
                     title={'E-Mail'}
                     control={control}
                     name={'email'}
+                    keyboardType={'email-address'}
                     rules={{
                         required: 'Please enter email.',
                         minLength: {
@@ -123,37 +168,59 @@ const CreateUserScreen = ({ navigation, route }) => {
                         },
                     }}
                 />
-            { !isEdit &&  <CustomInput 
-                    title={'Password'}
-                    control={control}
-                    name={'password'}
-                    rules={{
-                        required: 'Please enter password.',
-                        minLength: {
-                            value: 6,
-                            message: 'Please enter a minimum of 6 characters.'
-                        },
+                <View style={styles.dropDownCnt} >
+                <SelectDropdown
+                    data={userStatus}
+                    buttonStyle={styles.buttonStyle}
+                    buttonTextStyle={styles.buttonTextStyle}
+                    rowStyle={{ backgroundColor: Colors.bg_color }}
+                    rowTextStyle={{ color: '#272A48', fontSize: 14 }}
+                    searchInputStyle={{ backgroundColor: '#2C3E50' }}
+                    searchInputTxtColor={'white'}
+                    dropdownStyle={{ backgroundColor: '#2C3E50' }}
+                    searchPlaceHolder={'...'}
+                    onSelect={(selectedItem, index) => {
+                        setOnUserStatus(selectedItem)
                     }}
-                />}
+                    buttonTextAfterSelection={(selectedItem, index) => {
+                    return selectedItem
+                    }}
+                    rowTextForSelection={(item, index) => {
+                    return item
+                    }}
+                    defaultButtonText={'Status'}
+                 />
             
+                {onUserStatus.length > 0 &&  <Text style={styles.status} >Status</Text>}
+                <ArrowIcon style={styles.dropIcon} />
+                
+            </View>
+
                 {
                    isEdit ?
                         <> 
                             <View style={{ height: 20 }} />
-                            <CustomButton type={'TERTIARY'} title={'Edit'} onPress={handleSubmit(handleUpdate)} />
-                            <CustomButton type={'PRIMARY'} title={'Delete User'}  onPress={handleDelete} />
+                            <CustomButton type={'TERTIARY'} title={'Edit'} loading={loading} onPress={handleSubmit(handleUpdate)} />
+                            <CustomButton type={'PRIMARY'} title={'Delete User'} loading={loadingDelete}  onPress={handleDelete} />
                         </> 
                         :
                         <>
                             <View style={{ height: 120 }} />
-                            <CustomButton type={'TERTIARY'} title={'Add'} onPress={handleSubmit(handleAdd)} />
+                            <CustomButton type={'TERTIARY'} title={'Add'}  onPress={handleSubmit(handleAdd)} loading={loading}
+                             />
                             <View style={{ height: 120 }} />
                         </>
                 }
 
             </View>
 
-                <CustomModal/>
+                <CustomModal
+                 onDelete={onDelete}
+                 isModalVisible={isModalVisible}
+                 setModalVisible={setModalVisible}
+                 userInfo={userInfo}
+                 navigation={navigation}
+                />
         </ScrollView>
     )
 }
@@ -188,7 +255,40 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 5,
         left: 15
-    }
+    },
+    dropDownCnt:{
+        backgroundColor:'transparent',
+        marginTop:10,
+        justifyContent:'center'
+    },
+    buttonTextStyle: {
+        color: '#272A48',
+        fontSize: 15,
+        textAlign: 'left',
+        position: 'absolute',
+        right:10
+      },
+      buttonStyle: {
+        backgroundColor: 'white',
+        borderBottomWidth: 1,
+        borderColor: 'white',
+        alignSelf: 'center',
+        width:'100%',
+        height:65,
+        borderRadius:20,
+       
+      },
+      status:{
+        fontSize:12,
+        position:'absolute',
+        left:15,
+        top:6,
+        color:'#282828'
+      },
+      dropIcon:{
+        position:'absolute',
+        right:30 
+      }
 })
 
 export default CreateUserScreen

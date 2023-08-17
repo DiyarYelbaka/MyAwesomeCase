@@ -1,16 +1,21 @@
 import { View, Text,StyleSheet,FlatList,Image,TouchableOpacity,RefreshControl } from 'react-native'
-import React,{useEffect,useState} from 'react'
+import React,{useEffect,useState,useCallback} from 'react'
 import Colors from '../../styles/Colors';
 import { get } from '../../services/api';
+import { useFocusEffect } from '@react-navigation/native';
+import ListEmptyComponent from '../../components/ListEmptyComponent';
 
 
-const UsersScreen = ({navigation}) => {
+const UsersScreen = ({navigation,route}) => {
 const [data, setData] = useState({})
 const [refreshing, setRefreshing] = useState(false);
- 
+
+const {onRefresh} = route.params || false
+
   useEffect(()=>{
     getUserData()
-  },[])
+  },[onRefresh])
+  
 
   const getUserData= async()=>{
     try {
@@ -51,6 +56,9 @@ const [refreshing, setRefreshing] = useState(false);
         renderItem={({item}) => <UserCard item={item} />}
         keyExtractor={item => item.user_id}
         contentContainerStyle={{paddingBottom:70}}
+        ListEmptyComponent={() => (
+          <ListEmptyComponent text={'Henüz kimseyi beğenmemişsiniz.'} />
+        )}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
