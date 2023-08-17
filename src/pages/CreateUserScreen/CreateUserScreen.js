@@ -1,35 +1,27 @@
-import { View, Text, StyleSheet, ScrollView, Image,Button,TouchableOpacity } from 'react-native'
-import React,{useState} from 'react'
+import { View, Text, StyleSheet, ScrollView, Image, Button, TouchableOpacity } from 'react-native'
+import React, { useState } from 'react'
 import CutsomHeader from '../../components/CutsomHeader'
 import { useForm } from "react-hook-form";
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import { Picker } from '@react-native-picker/picker';
 import Colors from '../../styles/Colors';
+import CustomModal from '../../components/CustomModal';
 
-const CreateUserScreen = ({ navigation }) => {
+const CreateUserScreen = ({ navigation, route }) => {
     const { handleSubmit, control, formState: { errors }, watch } = useForm();
-    const cities = [
-        { name: 'Active', id: 1 },
-        { name: 'Deactive', id: 2 },
-      ];
-    
-      const [selectedCity, setSelectedCity] = useState('');
-    
-      const handleCityChange = itemValue => {
-        setSelectedCity(itemValue);
-      };
+    const { isEdit } = route.params || false
+    console.log(isEdit)
 
     return (
         <ScrollView>
-            <CutsomHeader title={'Create User'} onPress={() => navigation.goBack()} />
+            <CutsomHeader title={ isEdit ? 'Edit User' : 'Create User'} onPress={() => navigation.goBack()} />
 
             <View style={styles.imageContainer}>
                 <Image
                     source={require('../../assets/image/profile_image.png')}
                     style={styles.image}
                 />
-                
+
             </View>
             <View style={styles.inputContainer}  >
                 <CustomInput
@@ -70,38 +62,25 @@ const CreateUserScreen = ({ navigation }) => {
                         },
                     }}
                 />
-                 <View style={styles.status} >
-                    <Text style={styles.statusText} >Status</Text>
-                <Picker
-                    enabled={true}
-                    mode="dropdown"
-                    placeholder="Select City"
-                    onValueChange={handleCityChange}
-                    selectedValue={selectedCity}
-                    dropdownIconColor={Colors.red}
-                    
-                >   
-                    {cities.map(item => (
-                        <Picker.Item
-                            label={item.name.toString()}
-                            value={item.name.toString()}
-                            key={item.id.toString()}
-                        />
-                    ))}
-                </Picker>
-
-                {/* <TouchableOpacity  title="Print City" onPress={handlePrintCity}>
-                   <Text>{selectedCity}</Text>
-                </TouchableOpacity> */}
-            </View>
-
-                <View style={{ height: 120 }} />
-                <CustomButton type={'TERTIARY'} title={'Add'} />
-                <View style={{ height: 120 }} />
+            
+                {
+                   isEdit ?
+                        <> 
+                            <View style={{ height: 20 }} />
+                            <CustomButton type={'TERTIARY'} title={'Edit'}  />
+                            <CustomButton type={'PRIMARY'} title={'Delete User'} />
+                        </>
+                        :
+                        <>
+                            <View style={{ height: 120 }} />
+                            <CustomButton type={'TERTIARY'} title={'Add'} />
+                            <View style={{ height: 120 }} />
+                        </>
+                }
 
             </View>
-           
 
+                <CustomModal/>
         </ScrollView>
     )
 }
@@ -128,20 +107,14 @@ const styles = StyleSheet.create({
         borderRadius: 50,
     },
     inputContainer: {
-        marginHorizontal: 10
+        marginHorizontal: 10,
+        marginTop:20
     },
-    status:{
-        backgroundColor:Colors.white,
-        height:72,
-        borderRadius:20,
-        justifyContent:'center',
-        marginTop:10
-    },
-    statusText:{
-        fontSize:13,
-        position:'absolute',
-        top:5,
-        left:15
+    statusText: {
+        fontSize: 13,
+        position: 'absolute',
+        top: 5,
+        left: 15
     }
 })
 

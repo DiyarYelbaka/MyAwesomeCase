@@ -19,7 +19,8 @@ const styles = StyleSheet.create({
      justifyContent:'center',
      alignItems:'center',
      borderRadius:30,
-     marginVertical:5
+     marginVertical:5,
+    flex:1
    },
     button_PRIMARY:{
     backgroundColor:Colors.red,
@@ -30,6 +31,9 @@ const styles = StyleSheet.create({
     button_TERTIARY:{
       backgroundColor:Colors.green,
       },
+    button_QUANTERNARY:{
+      backgroundColor:'#000000'
+    },
    buttonTitle:{
     color:Colors.white,
     fontSize:18, 

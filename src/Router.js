@@ -1,4 +1,3 @@
-import { View, Text } from 'react-native'
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -10,6 +9,7 @@ import UsersScreen from './pages/UsersScreen';
 import Colors from './styles/Colors';
 import CustomTabIcon from './components/CustomTabIcon';
 import CreateUserScreen from './pages/CreateUserScreen';
+
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -27,7 +27,7 @@ const Router = () => {
      <Stack.Screen name="signInScreen"  component={SignInScreen} />
      <Stack.Screen name="signUpScreen" component={SignUpScreen} />
 
-     <Stack.Screen name="createUserScreen" component={CreateUserScreen} />
+
      </Stack.Navigator>
     </NavigationContainer>
   )
@@ -48,7 +48,7 @@ function MyTabs({navigation}) {
         },
      }}
       >
-        <Tab.Screen name="usersScreen" component={UsersScreen} 
+        <Tab.Screen name="userStack" component={UserStack} 
         options={{
           tabBarIcon: ({ focused }) => (
             <CustomTabIcon title='Ana Sayfa' focused={focused} source={1} />
@@ -73,6 +73,20 @@ function MyTabs({navigation}) {
       </Tab.Navigator>
     );
   }
+
+  
+const UserStack = () => {
+  return (
+     <Stack.Navigator
+     screenOptions={{
+        headerShown:false,
+     }}
+     >
+     <Stack.Screen name="usersScreen" component={UsersScreen} />
+     <Stack.Screen name="editUserScreen" component={CreateUserScreen} />
+     </Stack.Navigator>
+  )
+}
   
 
 

@@ -3,7 +3,7 @@ import React from 'react'
 import CutsomHeader from '../../components/CutsomHeader'
 import Colors from '../../styles/Colors';
 
-const UsersScreen = () => {
+const UsersScreen = ({navigation}) => {
 
   const DATA = [
     {
@@ -23,7 +23,10 @@ const UsersScreen = () => {
     },
   ];
   const UserCard = ({item}) => (
-    <TouchableOpacity style={styles.item}>
+    <TouchableOpacity 
+    style={styles.item} 
+    onPress={()=>navigation.navigate('editUserScreen',{isEdit: true})}
+    >
       <Image
        source={{uri:"https://this-person-does-not-exist.com/img/avatar-gen3abcf72b64f1aefb780b97fa077d1e82.jpg"}}
        style={styles.photo}
