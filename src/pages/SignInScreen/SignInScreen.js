@@ -3,6 +3,7 @@ import React,{useContext} from 'react'
 import Colors from '../../styles/Colors'
 import CutsomHeader from '../../components/CutsomHeader'
 import HandIcon from '../../assets/svg/hand_icon.svg'
+import Logo from '../../assets/svg/login_logo.svg'
 
 import { useForm, Controller } from "react-hook-form";
 import CustomInput from '../../components/CustomInput'
@@ -26,7 +27,7 @@ const SignInScreen = ({navigation}) => {
       <StatusBar backgroundColor="transparent" barStyle="dark-content" translucent={true} />
       <CutsomHeader title={'Login'} onPress={()=> navigation.navigate('welcomeScreen')} />
       <View style={styles.container}  >
-  
+        <Logo style={styles.logo} />
         <View style={{ flexDirection: 'row',marginTop:80 }} >
           <Text style={styles.textHi}>Hello There</Text>
           <HandIcon width={25} height={20} />
@@ -78,7 +79,7 @@ const SignInScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.bg_color,
-    marginHorizontal: 10
+    marginHorizontal: 20
   },
   textHi:{
     fontSize:14,
@@ -92,7 +93,11 @@ const styles = StyleSheet.create({
   },
   inputContainer:{
     marginTop:20,
-    marginBottom:Dimensions.get('window').width/1.5
+    marginBottom:Dimensions.get('screen').height/5.5
+  },
+  logo:{
+    alignSelf:'center',
+    marginTop:50
   }
 })
 

@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   },
   item: {
     minHeight:76,
-    marginHorizontal:10,
+    marginHorizontal:20,
     backgroundColor:Colors.white,
     marginVertical:10,
     flexDirection:'row',

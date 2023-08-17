@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     marginTop:50,
     justifyContent:'space-between',
     alignItems:'center',
-    marginHorizontal:10
+    marginHorizontal:20
   },
   icon:{
     // position:'absolute',

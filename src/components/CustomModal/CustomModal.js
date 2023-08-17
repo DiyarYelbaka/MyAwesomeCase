@@ -67,7 +67,7 @@ const CustomModal = ({ isModalVisible, setModalVisible, onDelete,userInfo,naviga
                 <CompleteIcon height={'120'} width={'120'} style={styles.complete} />
                 <Text style={styles.title} >Updated!</Text>
                 <Text style={styles.desc} >Updated Successfully.</Text>
-                <View style={{ height: 52 }} >
+                <View style={{ height: 52,marginHorizontal:10 }} >
                   <CustomButton title={"Okey"} type={'PRIMARY'} onPress={handleUpdate}  />
                 </View>
               </>

@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
     },
     inputContainer: {
-        marginHorizontal: 10,
+        marginHorizontal: 20,
         marginTop:20
     },
     statusText: {
