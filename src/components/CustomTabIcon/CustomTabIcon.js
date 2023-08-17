@@ -1,13 +1,21 @@
 import { View, Text, StyleSheet,TouchableOpacity } from 'react-native'
-import React from 'react'
+import React,{useContext} from 'react'
 import ProfileIcon from '../../assets/svg/profile_icon.svg'
 import LogOutIcon from '../../assets/svg/logout_icon.svg'
 import Colors from '../../styles/Colors'
 import PlusIcon from '../../assets/svg/plus_icon'
+import { AuthContext } from '../../context/AuthContext'
 
 
 
 const CustomTabIcon = ({ source, focused }) => {
+
+    const {logOut} = useContext(AuthContext)
+
+    function handleLogOut(){
+        return logOut
+    }
+
     return (
         <View>
             <View style={{ alignItems: 'center', justifyContent: 'center', width:50}}>
@@ -17,12 +25,14 @@ const CustomTabIcon = ({ source, focused }) => {
                     style={{ color: focused ? Colors.defaultGreenColor : 'white' }}
                 />}
                 {source=='2' && 
+     
                 <View style={{alignItems:'center'}}>
                 <LogOutIcon width={24} height={24}
                     style={{ color: focused ?  Colors.defaultGreenColor : 'white' }}
                 />
                 <Text style={styles.text} >logout</Text>
                  </View>
+                
                 }
                 {source=='3' && 
                 <View style={styles.plus}>

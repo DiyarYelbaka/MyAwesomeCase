@@ -5,10 +5,9 @@ import Line from '../../assets/svg/top_line_icon.svg'
 import CompleteIcon from '../../assets/svg/complated_icon.svg'
 import DeleteIcon from '../../assets/svg/deleted_icon.svg'
 import CustomButton from '../CustomButton';
-import { BlurView } from 'expo-blur';
 
 const CustomModal = () => {
-    const [isModalVisible, setModalVisible] = useState(true)
+    const [isModalVisible, setModalVisible] = useState(false)
     function toggleModal() {
         setModalVisible(!isModalVisible);
       }

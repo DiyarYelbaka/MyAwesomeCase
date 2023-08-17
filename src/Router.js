@@ -1,4 +1,5 @@
-import React from 'react'
+import React,{useEffect,useContext} from 'react'
+import { View, Text,TouchableOpacity } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SignInScreen from './pages/SignInScreen';
@@ -9,12 +10,18 @@ import UsersScreen from './pages/UsersScreen';
 import Colors from './styles/Colors';
 import CustomTabIcon from './components/CustomTabIcon';
 import CreateUserScreen from './pages/CreateUserScreen';
+import { AuthContext } from './context/AuthContext';
 
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const Router = () => {
+
+  const {onToken} = useContext(AuthContext)
+
+  console.log("Burada",onToken)
+
   return (
     <NavigationContainer>
      <Stack.Navigator
@@ -22,18 +29,27 @@ const Router = () => {
         headerShown:false,
      }}
      >
-      <Stack.Screen name="bottomBar" component={MyTabs} />
-     <Stack.Screen name="welcomeScreen" component={WelcomeScreen} />
-     <Stack.Screen name="signInScreen"  component={SignInScreen} />
-     <Stack.Screen name="signUpScreen" component={SignUpScreen} />
-
-
+      {
+        onToken ?
+        <Stack.Screen name="bottomBar" component={MyTabs} />
+        :
+        <>
+        <Stack.Screen name="welcomeScreen" component={WelcomeScreen} />
+        <Stack.Screen name="signInScreen"  component={SignInScreen} />
+        <Stack.Screen name="signUpScreen" component={SignUpScreen} />
+        </>
+      }
      </Stack.Navigator>
     </NavigationContainer>
   )
 }
 
-function MyTabs({navigation}) {
+function MyTabs() {
+  const {logOut} = useContext(AuthContext)
+  function handleLogout() {
+    return logOut()
+  }
+  
     return (
       <Tab.Navigator
       screenOptions={{
@@ -63,7 +79,13 @@ function MyTabs({navigation}) {
         ),
       }}
         />
-        <Tab.Screen name="Settings2" component={SignUpScreen}
+        <Tab.Screen name="logOut" component={CreateUserScreen}
+         listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            e.preventDefault(); // Sayfanın açılmasını engelle
+            handleLogout(); // Çıkış yapma fonksiyonunu çağır
+          },
+        })}
         options={{
           tabBarIcon: ({ focused }) => (
             <CustomTabIcon title='Ana Sayfa' focused={focused} source={2} />

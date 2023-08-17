@@ -6,11 +6,72 @@ import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import Colors from '../../styles/Colors';
 import CustomModal from '../../components/CustomModal';
+import { deleteUser, post, updateUser } from '../../services/api';
 
 const CreateUserScreen = ({ navigation, route }) => {
-    const { handleSubmit, control, formState: { errors }, watch } = useForm();
     const { isEdit } = route.params || false
-    console.log(isEdit)
+    const { userInfo } = route.params || {}
+
+    
+    const { handleSubmit, control, formState: { errors }, watch } = useForm({
+        defaultValues:{
+            fullName:userInfo?.user_fullname,
+            email:userInfo?.user_email,
+            phoneNumber:userInfo?.user_phone
+        }
+    });
+   
+
+   async function handleAdd(data){
+    const { fullName,email, password,phoneNumber } = data;
+    console.log(fullName,email,password)
+    const postData = { 
+        user_fullname:fullName,
+        user_email:email,
+        user_password:password,
+        user_phone:phoneNumber
+      };
+      try {
+        const getResponse = await post('/users/new',postData);
+        console.log('GET Response:', getResponse);
+      } catch (error) {
+        console.error('Error:', error);
+        
+      //  console.error('Error:', error.response.data.errorCode);
+     }
+    }
+    console.log(userInfo.user_id)
+    
+   async function handleUpdate(data){
+        const { fullName,phoneNumber,email } = data;
+        console.log(fullName,email,phoneNumber)
+        const postData = { 
+            user_id:userInfo.user_id,
+            user_fullname:fullName,
+            user_email:email,
+            user_phone:phoneNumber,
+            user_password:userInfo.user_password
+          };
+          try {
+            const getResponse = await updateUser(userInfo.user_id,postData);
+            console.log('GET Response:', getResponse);
+          } catch (error) {
+            console.error('Error:', error);
+            
+          //  console.error('Error:', error.response.data.errorCode);
+         }
+    }
+
+    async function handleDelete(){
+          try {
+            const getResponse = await deleteUser(userInfo.user_id);
+            console.log('GET Response:', getResponse);
+          } catch (error) {
+            console.error('Error:', error.response.data);
+            
+          //  console.error('Error:', error.response.data.errorCode);
+         }
+    }
 
     return (
         <ScrollView>
@@ -55,25 +116,37 @@ const CreateUserScreen = ({ navigation, route }) => {
                     control={control}
                     name={'email'}
                     rules={{
-                        required: 'Please enter phone email.',
+                        required: 'Please enter email.',
                         minLength: {
                             value: 1,
                             message: 'Invalid email.'
                         },
                     }}
                 />
+            { !isEdit &&  <CustomInput 
+                    title={'Password'}
+                    control={control}
+                    name={'password'}
+                    rules={{
+                        required: 'Please enter password.',
+                        minLength: {
+                            value: 6,
+                            message: 'Please enter a minimum of 6 characters.'
+                        },
+                    }}
+                />}
             
                 {
                    isEdit ?
                         <> 
                             <View style={{ height: 20 }} />
-                            <CustomButton type={'TERTIARY'} title={'Edit'}  />
-                            <CustomButton type={'PRIMARY'} title={'Delete User'} />
-                        </>
+                            <CustomButton type={'TERTIARY'} title={'Edit'} onPress={handleSubmit(handleUpdate)} />
+                            <CustomButton type={'PRIMARY'} title={'Delete User'}  onPress={handleDelete} />
+                        </> 
                         :
                         <>
                             <View style={{ height: 120 }} />
-                            <CustomButton type={'TERTIARY'} title={'Add'} />
+                            <CustomButton type={'TERTIARY'} title={'Add'} onPress={handleSubmit(handleAdd)} />
                             <View style={{ height: 120 }} />
                         </>
                 }

@@ -1,43 +1,42 @@
 import { View, Text,StyleSheet,FlatList,Image,TouchableOpacity  } from 'react-native'
-import React from 'react'
-import CutsomHeader from '../../components/CutsomHeader'
+import React,{useEffect,useState} from 'react'
 import Colors from '../../styles/Colors';
+import { get } from '../../services/api';
+
 
 const UsersScreen = ({navigation}) => {
+const [data, setData] = useState({})
+ 
+  useEffect(()=>{
+    getUserData()
+  },[])
 
-  const DATA = [
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      fullName: 'First Item',
-      active:false
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      fullName: 'Second Item',
-      active:true
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      fullName: 'Third Item',
-      active:true
-    },
-  ];
-  const UserCard = ({item}) => (
+  const getUserData= async()=>{
+    try {
+      const getResponse = await get('/users');
+      console.log('GET Response:', getResponse.response);
+      setData(getResponse.response)
+    } catch (error) {
+      console.error('Error:', error);
+   }
+  }
+ 
+  const UserCard = ({item}) =>(
     <TouchableOpacity 
     style={styles.item} 
-    onPress={()=>navigation.navigate('editUserScreen',{isEdit: true})}
+    onPress={()=>navigation.navigate('editUserScreen',{isEdit: true,userInfo:item})}
     >
       <Image
-       source={{uri:"https://this-person-does-not-exist.com/img/avatar-gen3abcf72b64f1aefb780b97fa077d1e82.jpg"}}
+       source={require('../../assets/image/profile_image.png')}
        style={styles.photo}
       />
-      <Text style={styles.fullName}>{item.fullName}</Text>
+      <Text style={styles.fullName}>{item.user_fullname}</Text>
       {
-        item.active ?
+        item.user_status === 'Active' ?
        <Text style={styles.active} >Active</Text>
         :
-       <Text style={styles.passive} >Passive</Text>
-      }
+       <Text style={styles.passive} >Passive</Text> 
+      } 
     </TouchableOpacity>
   );
 
@@ -45,9 +44,9 @@ const UsersScreen = ({navigation}) => {
     <View style={styles.container} >
       <Text style={styles.title} >Users</Text>
       <FlatList
-        data={DATA}
+        data={data}
         renderItem={({item}) => <UserCard item={item} />}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.user_id}
       />
     </View> 
   )

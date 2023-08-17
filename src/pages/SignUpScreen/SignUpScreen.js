@@ -16,8 +16,8 @@ const SignUpScreen = ({navigation}) => {
   const {register} = useContext(AuthContext)
 
   async function onSignUpPress(data) {
-    const { email, password, fullName } = data;
-     return register(email, password, fullName)
+    const { fullName,email, password  } = data;
+     return register(fullName,email,password )
     //console.log(email,password,username)
     //navigation.navigate('signUpScreen') 
   }
