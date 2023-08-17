@@ -1,11 +1,11 @@
-import { View,Text, StyleSheet, ScrollView, Image,KeyboardAvoidingView,Alert} from 'react-native'
-import React, { useEffect, useState} from 'react'
+import { View,Text, StyleSheet, ScrollView, Image,Alert} from 'react-native'
+import React, {useState} from 'react'
 import CutsomHeader from '../../components/CutsomHeader'
 import { useForm } from "react-hook-form";
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import CustomModal from '../../components/CustomModal';
-import { deleteUser, post, updateUser } from '../../services/api';
+import { post, updateUser } from '../../services/api';
 import { showMessage} from "react-native-flash-message";
 import SelectDropdown from 'react-native-select-dropdown'
 import Colors from '../../styles/Colors';
@@ -25,8 +25,8 @@ const CreateUserScreen = ({ navigation, route }) => {
         "Active",
         "Passive",
       ]
-      const [onUserStatus, setOnUserStatus] = useState('');
-      
+      const [onUserStatus, setOnUserStatus] = useState(userInfo?.user_status);
+      console.log(userInfo?.user_status)
 
     const { handleSubmit, control, formState: { errors }, watch,reset } = useForm({
         defaultValues:{
@@ -188,10 +188,10 @@ const CreateUserScreen = ({ navigation, route }) => {
                     rowTextForSelection={(item, index) => {
                     return item
                     }}
-                    defaultButtonText={'Status'}
+                    defaultButtonText={userInfo?.user_status ? userInfo?.user_status :'Status'}
                  />
             
-                {onUserStatus.length > 0 &&  <Text style={styles.status} >Status</Text>}
+                {onUserStatus?.length > 0 &&  <Text style={styles.status} >Status</Text>}
                 <ArrowIcon style={styles.dropIcon} />
                 
             </View>
@@ -199,18 +199,20 @@ const CreateUserScreen = ({ navigation, route }) => {
                 {
                    isEdit ?
                         <> 
-                            <View style={{ height: 20 }} />
+                            <View style={{ marginTop:25,marginBottom:80 }} >
                             <CustomButton type={'TERTIARY'} title={'Edit'} loading={loading} onPress={handleSubmit(handleUpdate)} />
                             <CustomButton type={'PRIMARY'} title={'Delete User'} loading={loadingDelete}  onPress={handleDelete} />
+                            </View>
                         </> 
                         :
                         <>
-                            <View style={{ height: 120 }} />
+                            <View style={{ marginTop:60,marginBottom:80 }} >
                             <CustomButton type={'TERTIARY'} title={'Add'}  onPress={handleSubmit(handleAdd)} loading={loading}
                              />
-                            <View style={{ height: 120 }} />
+                            </View>
                         </>
                 }
+                <View style={{height:100}} />
 
             </View>
 

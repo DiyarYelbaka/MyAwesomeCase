@@ -1,8 +1,7 @@
-import { View, Text,StyleSheet,FlatList,Image,TouchableOpacity,RefreshControl } from 'react-native'
-import React,{useEffect,useState,useCallback} from 'react'
+import { View, Text,StyleSheet,FlatList,Image,TouchableOpacity,RefreshControl,Platform} from 'react-native'
+import React,{useEffect,useState} from 'react'
 import Colors from '../../styles/Colors';
 import { get } from '../../services/api';
-import { useFocusEffect } from '@react-navigation/native';
 import ListEmptyComponent from '../../components/ListEmptyComponent';
 
 
@@ -49,13 +48,11 @@ const {onRefresh} = route.params || false
   return (
     <View style={styles.container} >
       <Text style={styles.title} >Users</Text>
-     
-    
       <FlatList
         data={data}
         renderItem={({item}) => <UserCard item={item} />}
         keyExtractor={item => item.user_id}
-        contentContainerStyle={{paddingBottom:70}}
+        contentContainerStyle={{paddingBottom:90}}
         ListEmptyComponent={() => (
           <ListEmptyComponent text={'Henüz kimseyi beğenmemişsiniz.'} />
         )}
@@ -76,12 +73,12 @@ const styles = StyleSheet.create({
     flex:1
   },
   title:{
-    marginTop:50,
+    marginTop: Platform.OS === 'ios' ? 60 : 50,
     fontWeight:'bold',
     fontSize:16,
     color:'#2A2A2E',
     alignSelf:'center',
-    marginBottom:25
+    marginBottom:25,
   },
   item: {
     minHeight:76,
@@ -91,7 +88,7 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems:'center',
     borderRadius:20,
-    padding:10
+    padding:10,
   },
   photo:{
     width:50,
@@ -108,18 +105,20 @@ const styles = StyleSheet.create({
     right:20,
     paddingVertical:5,
     paddingHorizontal:15,
-    borderRadius:20,
+    borderRadius:15,
     color:'#12AA18',
     backgroundColor:'#D2FBD4',
+    overflow:'hidden'
   },
   passive:{
     position:'absolute',
     right:20,
     paddingVertical:5,
     paddingHorizontal:10,
-    borderRadius:20,
+    borderRadius:15,
     color:'#FF6464',
     backgroundColor:'#FFF0F0',
+    overflow:'hidden'
   }
  
 })

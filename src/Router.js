@@ -1,5 +1,5 @@
-import React,{useEffect,useContext} from 'react'
-import { View, Text,TouchableOpacity } from 'react-native'
+import React,{useContext} from 'react'
+import {Platform,StatusBar } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SignInScreen from './pages/SignInScreen';
@@ -21,7 +21,6 @@ const Router = () => {
 
   const {onToken,splashLoading} = useContext(AuthContext)
 
-  console.log("Burada",onToken)
 
   if(splashLoading === true){
     return <Loading />
@@ -58,6 +57,7 @@ function MyTabs() {
   }
   
     return (
+     <>
       <Tab.Navigator
       screenOptions={{
         headerShown:false,
@@ -66,11 +66,12 @@ function MyTabs() {
           position: 'absolute',
           elevation: 8,
           backgroundColor: Colors.white,
-          height: 65,
+          height: Platform.OS === 'ios' ? 95 : 65,
           borderTopWidth: 0
         },
      }}
       >
+        
         <Tab.Screen name="userStack" component={UserStack} 
         options={{
           tabBarIcon: ({ focused }) => (
@@ -100,6 +101,8 @@ function MyTabs() {
         }}
          />
       </Tab.Navigator>
+       <StatusBar backgroundColor="transparent" barStyle="dark-content" translucent={true} />
+       </> 
     );
   }
 

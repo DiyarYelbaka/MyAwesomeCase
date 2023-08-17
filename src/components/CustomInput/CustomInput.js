@@ -37,6 +37,8 @@ const CustomInput = ({ title, placeholder, visiblePassword = false, name, contro
                                 style={{ backgroundColor: 'transparent' }}
                                 textColor={'#272A48'}
                                 activeUnderlineColor={'#282828'}
+                                autoCapitalize='none'
+                                
 
                             />
                             {visiblePassword &&

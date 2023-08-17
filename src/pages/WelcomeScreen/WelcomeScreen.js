@@ -1,4 +1,4 @@
-import { View, Text,ImageBackground,Image,StatusBar,ScrollView,StyleSheet,Dimensions } from 'react-native'
+import { View, Text,Image,StatusBar,ScrollView,StyleSheet,Dimensions } from 'react-native'
 import React from 'react'
 import BgImage from '../../assets/image/bg_image.png'
 import CustomButton from '../../components/CustomButton'

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, ScrollView, StatusBar,Dimensions } from 'react-native'
-import React,{useContext, useState} from 'react'
+import React,{useContext} from 'react'
 import Colors from '../../styles/Colors'
 import CutsomHeader from '../../components/CutsomHeader'
 import HandIcon from '../../assets/svg/hand_icon.svg'
