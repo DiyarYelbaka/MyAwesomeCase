@@ -24,7 +24,7 @@ const CreateUserScreen = ({ navigation, route }) => {
 
    async function handleAdd(data){
     const { fullName,email, password,phoneNumber } = data;
-    console.log(fullName,email,password)
+    console.log(fullName,email,password,phoneNumber)
     const postData = { 
         user_fullname:fullName,
         user_email:email,
@@ -37,23 +37,23 @@ const CreateUserScreen = ({ navigation, route }) => {
       } catch (error) {
         console.error('Error:', error);
         
-      //  console.error('Error:', error.response.data.errorCode);
+       console.error('Error:', error.response.data.response);
      }
     }
-    console.log(userInfo.user_id)
+    console.log(userInfo?.user_id)
     
    async function handleUpdate(data){
         const { fullName,phoneNumber,email } = data;
         console.log(fullName,email,phoneNumber)
         const postData = { 
-            user_id:userInfo.user_id,
+            user_id:userInfo?.user_id,
             user_fullname:fullName,
             user_email:email,
             user_phone:phoneNumber,
-            user_password:userInfo.user_password
+            user_password:userInfo?.user_password
           };
           try {
-            const getResponse = await updateUser(userInfo.user_id,postData);
+            const getResponse = await updateUser(userInfo?.user_id,postData);
             console.log('GET Response:', getResponse);
           } catch (error) {
             console.error('Error:', error);
@@ -64,7 +64,7 @@ const CreateUserScreen = ({ navigation, route }) => {
 
     async function handleDelete(){
           try {
-            const getResponse = await deleteUser(userInfo.user_id);
+            const getResponse = await deleteUser(userInfo?.user_id);
             console.log('GET Response:', getResponse);
           } catch (error) {
             console.error('Error:', error.response.data);

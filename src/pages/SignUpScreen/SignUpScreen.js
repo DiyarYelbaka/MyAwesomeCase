@@ -13,15 +13,14 @@ import { AuthContext } from '../../context/AuthContext'
 const SignUpScreen = ({navigation}) => {
   
   const { handleSubmit, control, formState: { errors }, watch } = useForm();
-  const {register} = useContext(AuthContext)
+  const {register,loading} = useContext(AuthContext)
 
   async function onSignUpPress(data) {
-    const { fullName,email, password  } = data;
-     return register(fullName,email,password )
-    //console.log(email,password,username)
-    //navigation.navigate('signUpScreen') 
+    const { fullName,email, password } = data;
+     return register(fullName,email,password,navigation )
   }
 
+  const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
   return (
     <ScrollView style={{ backgroundColor: Colors.bg_color }} >
@@ -54,12 +53,15 @@ const SignUpScreen = ({navigation}) => {
           visiblePassword={false}
           control={control}
           name={'email'}
+          keyboardType={'email-address'}
           rules={{
-            required: 'Please enter username.',
+            required: 'Please enter email.',
             minLength: {
               value: 1,
               message: 'Invalid username.'
             },
+            pattern: { value: EMAIL_REGEX, message: 'Invalid mail!' },
+
           }}
           secureTextEntry={false}
         />
@@ -69,10 +71,10 @@ const SignUpScreen = ({navigation}) => {
           control={control}
           name={'password'}
           rules={{
-            required: 'Please enter username.',
+            required: 'Please enter password.',
             minLength: {
-              value: 1,
-              message: 'Invalid username.'
+              value:6,
+              message: 'Invalid password.'
             },
           }}
           secureTextEntry={true}
@@ -82,6 +84,7 @@ const SignUpScreen = ({navigation}) => {
         type={'PRIMARY'}  
         title={'Sign Up'} 
         onPress={handleSubmit(onSignUpPress)}
+        loading={loading}
        />
       </View>
     </ScrollView>

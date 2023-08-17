@@ -2,52 +2,80 @@ import React, { createContext, useState,useEffect } from "react";
 import { get, post } from "../services/api";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native'
+import { showMessage} from "react-native-flash-message";
+import Colors from "../styles/Colors";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-
   const [loading, setLoading] = useState(false)
   const [onToken, setOnToken] = useState(false)
+  const [splashLoading, setSplashLoading] = useState(false)
 
-  const register = async (fullName,email,password) => {
-    setLoading(true)
-    const postData = { 
-      user_fullname:fullName,
-      user_email:email,
-      user_password:password
-    };
+  const register = async (fullName,email,password,navigation) => {
+  
     try {
+      setLoading(true)
+      const postData = { 
+        user_fullname:fullName,
+        user_email:email,
+        user_password:password
+      };
       const getResponse = await post('/users',postData);
       console.log('GET Response:', getResponse);
       setLoading(false)
+      showMessage({
+        message: "Congratulations",
+        description: "you have successfully registered",
+        type: "success",
+      });
+      navigation.navigate('signInScreen')
     } catch (error) {
-      console.error('Error:', error);
       setLoading(false)
+      showMessage({
+        message: "Ops",
+        description: "You entered incorrect information, please try again.",
+        type: "danger",
+        backgroundColor: Colors.red
+      });
    }
   
   }
 
   const login = async (email,password) => {
-    setLoading(true)
-    const postData = { 
-      email,
-      password
-     };
+  
     try {
+      setLoading(true)
+      const postData = { 
+        email,
+        password
+       };
       const getResponse = await post('/login',postData);
+      console.log('Dataaa:', getResponse);
+
       console.log('GET Token:', getResponse.response.token);
       const token = getResponse.response.token;
       await AsyncStorage.setItem('userToken', token);
       setOnToken(true)
       setLoading(false)
-     // const token2 = await AsyncStorage.getItem('userToken');
-     // console.log("Burda",token2)
+      showMessage({
+        message: "Congratulations",
+        description: "you have successfully logged in",
+        type: "success",
+      });
+
     } catch (error) {
-      console.error('Error:', error);
-      console.error('Error:', error.response.data.errorCode.msg);
       setLoading(false)
+      console.error('Buradaaaa:', error);
+      showMessage({
+        message: "Ops",
+        description: "You entered incorrect information, please try again.",
+        type: "danger",
+        backgroundColor: Colors.red
+      });
+      //onsole.error('Error:', error.response.data.errorCode.msg);
    }
+
   }
 
   const logOut = async () => {
@@ -74,14 +102,20 @@ export const AuthProvider = ({ children }) => {
   }
 
   const loginCheck = async () => {
+    setSplashLoading(true)
     try {
       let userToken = await AsyncStorage.getItem('userToken');
       if (userToken) {
         setOnToken(true)
-        //console.log(userInfo)
       }
+      setTimeout(()=>{
+        setSplashLoading(false)
+      },1000)
     } catch (error) {
       console.log(error)
+      setTimeout(()=>{
+        setSplashLoading(false)
+      },1000)
     }
   }
 
@@ -99,7 +133,8 @@ export const AuthProvider = ({ children }) => {
     register,
     logOut,
     loading,
-    onToken
+    onToken,
+    splashLoading
     }}>{children}</AuthContext.Provider>
 }
 

@@ -1,4 +1,4 @@
-import { View, Text,StyleSheet,FlatList,Image,TouchableOpacity  } from 'react-native'
+import { View, Text,StyleSheet,FlatList,Image,TouchableOpacity,RefreshControl } from 'react-native'
 import React,{useEffect,useState} from 'react'
 import Colors from '../../styles/Colors';
 import { get } from '../../services/api';
@@ -6,6 +6,7 @@ import { get } from '../../services/api';
 
 const UsersScreen = ({navigation}) => {
 const [data, setData] = useState({})
+const [refreshing, setRefreshing] = useState(false);
  
   useEffect(()=>{
     getUserData()
@@ -43,10 +44,19 @@ const [data, setData] = useState({})
   return (
     <View style={styles.container} >
       <Text style={styles.title} >Users</Text>
+     
+    
       <FlatList
         data={data}
         renderItem={({item}) => <UserCard item={item} />}
         keyExtractor={item => item.user_id}
+        contentContainerStyle={{paddingBottom:70}}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => getUserData()}
+          />
+        }
       />
     </View> 
   )
@@ -54,14 +64,16 @@ const [data, setData] = useState({})
 
 const styles = StyleSheet.create({
   container:{
-    backgroundColor:Colors.bg_color
+    backgroundColor:Colors.bg_color,
+    flex:1
   },
   title:{
     marginTop:50,
     fontWeight:'bold',
     fontSize:16,
     color:'#2A2A2E',
-    alignSelf:'center'
+    alignSelf:'center',
+    marginBottom:25
   },
   item: {
     minHeight:76,

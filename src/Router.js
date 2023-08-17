@@ -11,16 +11,22 @@ import Colors from './styles/Colors';
 import CustomTabIcon from './components/CustomTabIcon';
 import CreateUserScreen from './pages/CreateUserScreen';
 import { AuthContext } from './context/AuthContext';
-
+import FlashMessage from "react-native-flash-message";
+import Loading from './components/Loading';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const Router = () => {
 
-  const {onToken} = useContext(AuthContext)
+  const {onToken,splashLoading} = useContext(AuthContext)
 
   console.log("Burada",onToken)
+
+  if(splashLoading === true){
+    return <Loading />
+   }
+  
 
   return (
     <NavigationContainer>
@@ -40,6 +46,7 @@ const Router = () => {
         </>
       }
      </Stack.Navigator>
+     <FlashMessage position="top" />
     </NavigationContainer>
   )
 }

@@ -12,17 +12,19 @@ import { AuthContext } from '../../context/AuthContext'
 const SignInScreen = ({navigation}) => {
   
   const { handleSubmit, control, formState: { errors }, watch } = useForm();
-  const {login} = useContext(AuthContext)
+  const {login,loading} = useContext(AuthContext)
+
   async function onSignUpPress(data) {
     const { email, password } = data;
      return login(email, password)
   }
 
+  const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
   return (
     <ScrollView style={{ backgroundColor: Colors.bg_color }} >
       <StatusBar backgroundColor="transparent" barStyle="dark-content" translucent={true} />
-      <CutsomHeader title={'Login'} onPress={()=> navigation.goBack()} />
+      <CutsomHeader title={'Login'} onPress={()=> navigation.navigate('welcomeScreen')} />
       <View style={styles.container}  >
   
         <View style={{ flexDirection: 'row',marginTop:80 }} >
@@ -36,12 +38,14 @@ const SignInScreen = ({navigation}) => {
           visiblePassword={false}
           control={control}
           name={'email'}
+          keyboardType={'email-address'}
           rules={{
             required: 'Please enter email adress.',
             minLength: {
               value: 5,
-              message: 'Invalid adress.'
+              message: 'Invalid mail!'
             },
+            pattern: { value: EMAIL_REGEX, message: 'Invalid mail!' },
           }}
           secureTextEntry={false}
         />
@@ -51,10 +55,10 @@ const SignInScreen = ({navigation}) => {
           control={control}
           name={'password'}
           rules={{
-            required: 'Please enter username.',
+            required: 'Please enter password.',
             minLength: {
-              value: 3,
-              message: 'Invalid username.'
+              value: 6,
+              message: 'Please enter a minimum of 6 characters.'
             },
           }}
           secureTextEntry={true}
@@ -64,6 +68,7 @@ const SignInScreen = ({navigation}) => {
         type={'PRIMARY'}  
         title={'Login'} 
         onPress={handleSubmit(onSignUpPress)}
+        loading={loading}
        />
       </View>
     </ScrollView>

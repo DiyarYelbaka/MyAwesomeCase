@@ -1,15 +1,24 @@
-import { View, Text,StyleSheet,TouchableOpacity } from 'react-native'
+import { View, Text,StyleSheet,TouchableOpacity,ActivityIndicator } from 'react-native'
 import React from 'react'
 import Colors from '../../styles/Colors'
 
-const CustomButton = ({onPress, title, type,disabled}) => {
+const CustomButton = ({onPress, title, type,loading}) => {
   return (
     <TouchableOpacity
-    disabled={disabled}
+    disabled={loading}
     style={[styles.button, styles[`button_${type}`]]}
     onPress={onPress}
   >
+    {
+      loading ? 
+      <View style={{flexDirection:'row'}} >
+      <ActivityIndicator color={'white'} style={{marginRight:10}} /> 
+      <Text style={styles.buttonTitle} >{'loading...'}</Text>
+      </View>
+      :
       <Text style={styles.buttonTitle} >{title}</Text>
+
+    }
     </TouchableOpacity>
   )
 }
