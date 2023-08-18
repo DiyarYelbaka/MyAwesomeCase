@@ -28,7 +28,6 @@ const CustomModal = ({ isModalVisible, setModalVisible, onDelete,userInfo,naviga
         description: "You have successfully created a user",
         type: "success",
       });
-      console.log('GET Response:', getResponse);
     } catch (error) {
       showMessage({
         message: "Ops",
@@ -37,8 +36,7 @@ const CustomModal = ({ isModalVisible, setModalVisible, onDelete,userInfo,naviga
       });
       setLoading(false)
       console.error('Error:', error);
-
-      //  console.error('Error:', error.response.data.errorCode);
+      //console.error('Error:', error.response.data.errorCode);
     }
   }
 

@@ -13,7 +13,6 @@ export const AuthProvider = ({ children }) => {
   const [splashLoading, setSplashLoading] = useState(false)
 
   const register = async (fullName,email,password,navigation) => {
-  
     try {
       setLoading(true)
       const postData = { 
@@ -22,7 +21,6 @@ export const AuthProvider = ({ children }) => {
         user_password:password
       };
       const getResponse = await post('/users',postData);
-      console.log('GET Response:', getResponse);
       setLoading(false)
       showMessage({
         message: "Congratulations",
@@ -43,37 +41,25 @@ export const AuthProvider = ({ children }) => {
   }
 
   const login = async (email,password) => {
-  
     try {
       setLoading(true)
       const postData = { 
         email,
         password
        };
-      const getResponse = await post('/login',postData);
-      console.log('Dataaa:', getResponse);
-
-      console.log('GET Token:', getResponse.response.token);
+      const getResponse = await post('/login',postData);;
       const token = getResponse.response.token;
       await AsyncStorage.setItem('userToken', token);
       setOnToken(true)
       setLoading(false)
-      showMessage({
-        message: "Congratulations",
-        description: "you have successfully logged in",
-        type: "success",
-      });
-
     } catch (error) {
       setLoading(false)
-      console.error('Buradaaaa:', error);
       showMessage({
         message: "Ops",
         description: "You entered incorrect information, please try again.",
         type: "danger",
         backgroundColor: Colors.red
       });
-      //onsole.error('Error:', error.response.data.errorCode.msg);
    }
 
   }
@@ -86,9 +72,7 @@ export const AuthProvider = ({ children }) => {
           try {
             await AsyncStorage.removeItem('userToken');
             setOnToken(false)
-            console.log('Token removed successfully.');
           } catch (error) {
-            console.error('Error removing token:', error);
           }
         } ,
       },
@@ -112,7 +96,6 @@ export const AuthProvider = ({ children }) => {
         setSplashLoading(false)
       },1000)
     } catch (error) {
-      console.log(error)
       setTimeout(()=>{
         setSplashLoading(false)
       },1000)

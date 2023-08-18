@@ -40,7 +40,7 @@ const SignUpScreen = ({navigation}) => {
           control={control}
           name={'fullName'}
           rules={{
-            required: 'Please enter username.',
+            required: 'Please enter full name.',
             minLength: {
               value: 1,
               message: 'Invalid username.'
@@ -55,7 +55,7 @@ const SignUpScreen = ({navigation}) => {
           name={'email'}
           keyboardType={'email-address'}
           rules={{
-            required: 'Please enter email.',
+            required: 'Please enter email addres.',
             minLength: {
               value: 1,
               message: 'Invalid username.'
@@ -94,7 +94,7 @@ const SignUpScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.bg_color,
-    marginHorizontal: 10
+    marginHorizontal: 20
   },
   textHi:{
     fontSize:14,

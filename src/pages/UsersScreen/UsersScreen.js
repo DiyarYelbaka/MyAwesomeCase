@@ -1,32 +1,60 @@
-import { View, Text,StyleSheet,FlatList,Image,TouchableOpacity,RefreshControl,Platform} from 'react-native'
-import React,{useEffect,useState} from 'react'
+import { View, Text,StyleSheet,FlatList,Image,TouchableOpacity,RefreshControl,Platform,Animated} from 'react-native'
+import React,{useEffect,useState,useRef} from 'react'
 import Colors from '../../styles/Colors';
 import { get } from '../../services/api';
 import ListEmptyComponent from '../../components/ListEmptyComponent';
 
 
 const UsersScreen = ({navigation,route}) => {
+
+
+
 const [data, setData] = useState({})
 const [refreshing, setRefreshing] = useState(false);
-
 const {onRefresh} = route.params || false
 
-  useEffect(()=>{
-    getUserData()
-  },[onRefresh])
-  
+
+const opacity = useRef(new Animated.Value(0)).current;
+const translateYValue = useState(new Animated.Value(100))[0];
+
+useEffect(()=>{
+  getUserData()
+},[onRefresh])
+
+
+useEffect(() => {
+  Animated.timing(opacity, {
+    toValue: 1,
+    duration: 1500, 
+    useNativeDriver: true,
+  }).start();
+  Animated.timing(translateYValue, {
+    toValue: 1,
+    duration: 1500,
+    useNativeDriver: true,
+  }).start();
+}, []);
+
+async function handleRefresh(){
+  opacity.setValue(1);
+  translateYValue.setValue(1);
+  await getUserData()
+}
+
 
   const getUserData= async()=>{
     try {
       const getResponse = await get('/users');
-      console.log('GET Response:', getResponse.response);
       setData(getResponse.response)
+
     } catch (error) {
       console.error('Error:', error);
+
    }
   }
  
   const UserCard = ({item}) =>(
+    <Animated.View style={[{ opacity },{ transform: [{ translateY: translateYValue }] }]}>
     <TouchableOpacity 
     style={styles.item} 
     onPress={()=>navigation.navigate('editUserScreen',{isEdit: true,userInfo:item})}
@@ -43,26 +71,28 @@ const {onRefresh} = route.params || false
        <Text style={styles.passive} >Passive</Text> 
       } 
     </TouchableOpacity>
+    </Animated.View>
   );
 
   return (
     <View style={styles.container} >
       <Text style={styles.title} >Users</Text>
-      <FlatList
+        <FlatList
         data={data}
         renderItem={({item}) => <UserCard item={item} />}
         keyExtractor={item => item.user_id}
         contentContainerStyle={{paddingBottom:90}}
         ListEmptyComponent={() => (
-          <ListEmptyComponent text={'Henüz kimseyi beğenmemişsiniz.'} />
+          <ListEmptyComponent/>
         )}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
-            onRefresh={() => getUserData()}
+            onRefresh={() => handleRefresh()}
           />
         }
       />
+    
     </View> 
   )
 }
@@ -98,7 +128,8 @@ const styles = StyleSheet.create({
   fullName:{
     marginLeft:10,
     fontSize:14,
-    width:'50%'
+    width:'50%',
+    fontFamily:'PlusJakartaSans',
   },
   active:{
     position:'absolute',

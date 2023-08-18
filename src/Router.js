@@ -13,6 +13,7 @@ import CreateUserScreen from './pages/CreateUserScreen';
 import { AuthContext } from './context/AuthContext';
 import FlashMessage from "react-native-flash-message";
 import Loading from './components/Loading';
+import {useFonts} from 'expo-font';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -21,8 +22,11 @@ const Router = () => {
 
   const {onToken,splashLoading} = useContext(AuthContext)
 
+  const [fontsLoaded] = useFonts({
+    'PlusJakartaSans': require('./assets/fonts/PlusJakartaSans-VariableFont_wght.ttf'),
+  });
 
-  if(splashLoading === true){
+  if(splashLoading === true && !fontsLoaded){
     return <Loading />
    }
   

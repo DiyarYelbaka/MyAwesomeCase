@@ -26,7 +26,6 @@ const CreateUserScreen = ({ navigation, route }) => {
         "Passive",
       ]
       const [onUserStatus, setOnUserStatus] = useState(userInfo?.user_status);
-      console.log(userInfo?.user_status)
 
     const { handleSubmit, control, formState: { errors }, watch,reset } = useForm({
         defaultValues:{
@@ -46,7 +45,6 @@ const CreateUserScreen = ({ navigation, route }) => {
 
     setLoading(true)
     const { fullName,email, password,phoneNumber } = data;
-    console.log(fullName,email,password,phoneNumber)
     const postData = { 
         user_fullname:fullName,
         user_email:email,
@@ -64,7 +62,6 @@ const CreateUserScreen = ({ navigation, route }) => {
             type: "success",
           });
           reset()
-        console.log('GET Response:', getResponse);
        
       } catch (error) {
         setLoading(false)
@@ -73,15 +70,12 @@ const CreateUserScreen = ({ navigation, route }) => {
             description: "Please try again",
             type: "danger",
           });
-        console.error('Error:', error);
-        //console.error('Error:', error.response.data.response);
      }
     }
     
    async function handleUpdate(data){
     setLoading(true)
         const { fullName,phoneNumber,email } = data;
-        console.log(fullName,email,phoneNumber)
         const postData = { 
             user_id: userInfo?.user_id,
             user_fullname:fullName,
@@ -89,15 +83,12 @@ const CreateUserScreen = ({ navigation, route }) => {
             user_phone:phoneNumber,
             user_password:userInfo?.user_password,
             user_status:onUserStatus
-            
           };
           try {
             const getResponse   = await updateUser(userInfo?.user_id,postData);
-         //   navigation.navigate('usersScreen',{onRefresh:randomNumber})
             setLoading(false)
             setOnDelete(false)
             setModalVisible(true)
-            console.log('GET Response:', getResponse);
           } catch (error) {
             showMessage({
                 message: "Ops",
@@ -105,8 +96,6 @@ const CreateUserScreen = ({ navigation, route }) => {
                 type: "danger",
               });
             setLoading(false)
-            console.error('Error:', error);
-            
           //  console.error('Error:', error.response.data.errorCode);
          }
     }
