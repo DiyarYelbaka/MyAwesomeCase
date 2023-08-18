@@ -42,9 +42,9 @@ const CustomInput = ({ title, placeholder, visiblePassword = false, name, contro
                             {visiblePassword &&
                             <TouchableOpacity style={styles.eyes} onPress={() => setVisible(!visible)}  >
                               {  visible ?
-                                    <Visible width="30" height="30" fill={'#fff'} />
+                                    <Visible width="24" height="24" fill={'#fff'} />
                                     :
-                                    <OffVisible width="30" height="30" fill={'#fff'} /> 
+                                    <OffVisible width="24" height="24" fill={'#fff'} /> 
                                 }
                             </TouchableOpacity>
                             }
