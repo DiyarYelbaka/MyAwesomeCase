@@ -38,8 +38,6 @@ const CustomInput = ({ title, placeholder, visiblePassword = false, name, contro
                                 textColor={'#272A48'}
                                 activeUnderlineColor={'#282828'}
                                 autoCapitalize='none'
-                                
-
                             />
                             {visiblePassword &&
                             <TouchableOpacity style={styles.eyes} onPress={() => setVisible(!visible)}  >

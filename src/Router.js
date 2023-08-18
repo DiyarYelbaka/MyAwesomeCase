@@ -79,7 +79,7 @@ function MyTabs() {
         <Tab.Screen name="userStack" component={UserStack} 
         options={{
           tabBarIcon: ({ focused }) => (
-            <CustomTabIcon title='Ana Sayfa' focused={focused} source={1} />
+            <CustomTabIcon  focused={focused} source={1} />
           ),
         }}
          />
@@ -87,7 +87,7 @@ function MyTabs() {
         <Tab.Screen name="createUserScreen" component={CreateUserScreen} 
       options={{
         tabBarIcon: ({ focused }) => (
-          <CustomTabIcon title='Ana Saysdfa'  focused={focused} source={3} />
+          <CustomTabIcon  focused={focused} source={3} />
         ),
       }}
         />
@@ -100,7 +100,7 @@ function MyTabs() {
         })}
         options={{
           tabBarIcon: ({ focused }) => (
-            <CustomTabIcon title='Ana Sayfa' focused={focused} source={2} />
+            <CustomTabIcon  focused={focused} source={2} />
           ),
         }}
          />

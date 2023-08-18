@@ -6,7 +6,7 @@ const CutsomHeader = ({onPress,title}) => {
   return (
     <View style={styles.container} >
       <TouchableOpacity onPress={onPress} >
-      <BackIcon width={44} height={44} style={styles.icon}  />
+      <BackIcon width={44} height={44} />
       </TouchableOpacity>
       <Text style={styles.title} >{title}</Text>
       <View style={styles.cloneButtn} />
@@ -22,10 +22,6 @@ const styles = StyleSheet.create({
     justifyContent:'space-between',
     alignItems:'center',
     marginHorizontal:20
-  },
-  icon:{
-    // position:'absolute',
-    // left:20
   },
   title:{
     fontWeight:'bold',

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet,TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import React,{useContext} from 'react'
 import ProfileIcon from '../../assets/svg/profile_icon.svg'
 import LogOutIcon from '../../assets/svg/logout_icon.svg'

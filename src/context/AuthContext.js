@@ -1,5 +1,5 @@
 import React, { createContext, useState,useEffect } from "react";
-import { get, post } from "../services/api";
+import { post } from "../services/api";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native'
 import { showMessage} from "react-native-flash-message";

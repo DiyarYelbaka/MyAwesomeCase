@@ -123,10 +123,10 @@ const CreateUserScreen = ({ navigation, route }) => {
                     control={control}
                     name={'fullName'}
                     rules={{
-                        required: 'Please enter username.',
+                        required: 'Please enter full name.',
                         minLength: {
-                            value: 1,
-                            message: 'Invalid username.'
+                            value: 3,
+                            message: 'Invalid full name.'
                         },
                     }}
                     secureTextEntry={false}
@@ -134,13 +134,14 @@ const CreateUserScreen = ({ navigation, route }) => {
                 <CustomInput
                     title={'Phone Number'}
                     control={control}
+                    maxLength={11}
                     name={'phoneNumber'}
                     keyboardType={'number-pad'}
                     rules={{
                         required: 'Please enter phone number.',
                         minLength: {
-                            value: 1,
-                            message: 'Invalid number.'
+                            value: 11,
+                            message: 'Invalid phone number.'
                         },
                     }}
                 />
@@ -152,7 +153,7 @@ const CreateUserScreen = ({ navigation, route }) => {
                     rules={{
                         required: 'Please enter email.',
                         minLength: {
-                            value: 1,
+                            value: 3,
                             message: 'Invalid email.'
                         },
                     }}
