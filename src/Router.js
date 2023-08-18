@@ -71,7 +71,9 @@ function MyTabs() {
           elevation: 8,
           backgroundColor: Colors.white,
           height: Platform.OS === 'ios' ? 95 : 65,
-          borderTopWidth: 0
+          borderTopWidth: 0,
+          borderTopLeftRadius:20,
+          borderTopRightRadius:20
         },
      }}
       >
