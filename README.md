@@ -55,7 +55,7 @@
    \```
 4. Run the application:
    \```
-   npx react-native run-android
+   npm start 
    \```
 
 ## Directory Structure
